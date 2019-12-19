@@ -44,7 +44,7 @@
 
             }  
            let topic="filip.segerberg@abbindustrigymnasium.se/";
-           let topic2="filip.segerberg@abbindustrigymnasium.se/Velocity";
+           let topic2="filip.segerberg@abbindustrigymnasium.se/Velocity";       //de olika topics su subscribar till
            let topic3="filip.segerberg@abbindustrigymnasium.se/Velocity1";
             // Called when the client connects
             function onConnect() {
@@ -60,19 +60,12 @@
             
                 // Subscribe to the requested topic
                 client.subscribe(topic);
-                  message= new Paho.MQTT.Message("stopp car0");
-                  message.destinationName=topic;
+                  message= new Paho.MQTT.Message("stopp car");
+                  message.destinationName=topic;                //När den subscribar skickar den även ett medelande till bilen att den ska stanna ifall att den körs
                   client.send(message);
                 
                 client.subscribe(topic2);
-                  message= new Paho.MQTT.Message("stopp car1");
-                  message.destinationName=topic2;
-                  client.send(message);
-
                 client.subscribe(topic3);
-                message= new Paho.MQTT.Message("stopp car2");
-                message.destinationName=topic3;
-                client.send(message);
             }
             function onSend() {
                 // Fetch the MQTT topic from the form
@@ -96,7 +89,7 @@
             
             function stoppCar(payloadString){
                 document.getElementById("messages").innerHTML += "stopp car<br/>"
-                message= new Paho.MQTT.Message("stopp car");
+                message= new Paho.MQTT.Message("stopp car");                //funktionen som säger åt bilarna att stanna
                 message.destinationName=topic;
                 client.send(message);
 
@@ -104,7 +97,7 @@
             function speedChange(payloadInt){
                 speed =document.getElementById("Velocity").value;
                 document.getElementById("messages").innerHTML += "Speed Change<br/>"
-                message= new Paho.MQTT.Message(quantity);
+                message= new Paho.MQTT.Message(quantity);           //funktionen som skickar den nya hastigheten till bilarna
                 message.destinationName=quantity;
                 client.send(message);
             }
@@ -147,11 +140,11 @@
             <b>Topic:</b>
             <br>
             <input id="topic" type="text" name="topic" value="logger"><br><br>
-            <input class = hej type="button" onclick="startConnect()" value="Connect">
-            <input class = hej type="button" onclick="startDisconnect()" value="Disconnect">
+            <input class = knapp type="button" onclick="startConnect()" value="Connect">
+            <input class = knapp type="button" onclick="startDisconnect()" value="Disconnect">
             <br><br>
             <input class = text id="newMessage" type="text" name="newMessage" value="">
-            <input class = hej type="button" onclick="onSend()" value="Send">
+            <input class = knapp type="button" onclick="onSend()" value="Send">
        
             <input class = stopp type="button" onclick="stoppCar()" value="Stopp">
             <br><br>
@@ -162,7 +155,7 @@
          <canvas id="Chart" ></canvas>
         </div>
          <script>
-             var canvas = document.getElementById('Chart');
+             var canvas = document.getElementById('Chart');         //grafen på hemsidan
         var data = {
         labels: [],
         datasets: [
@@ -202,18 +195,6 @@
                 borderJoinStyle: 'miter',
                 data: [],
             },
-            // {
-            //     label: "Reglervärdet",
-            //     fill: false,
-            //     lineTension: 0.1,
-            //     backgroundColor: "rgba(75,192,192,0.4)",
-            //     borderColor: "rgb(191, 191, 191)",
-            //     borderCapStyle: 'butt',
-            //     borderDash: [],
-            //     borderDashOffset: 0.0,
-            //     borderJoinStyle: 'miter',
-            //     data: [],
-            // },
             {
                 label: "PWMvärdet Filip",
                 fill: false,

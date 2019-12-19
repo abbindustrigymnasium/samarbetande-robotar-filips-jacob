@@ -2,11 +2,11 @@ h1{
     color:black;
     text-align: center;
     text-transform: capitalize;
-    font-size: 400%;   /*Headern*/
+    font-size: 400%;                /*Headern*/
     height: 10%;
     background-color: lightgreen;
     margin-top: -10px;
-    margin-right: -10%;
+    margin-right: -10%;         /*vi använder % istället för px för då anpasas storleken efter skärmen den visas på*/
     margin-left: -10%;
 
 
@@ -25,13 +25,13 @@ input{
 
 .knapp{
     border: none;
-    padding: 1% 2.3%;
+    padding: 1% 2.3%;   /*alla kanpar förutom stopp*/
 }
 
 
 .stopp{
     color:white;
-    background-color: darkred;
+    background-color: darkred;/*stopp knappen*/
     border: none;
     padding: 1% 2%;
 }
@@ -43,7 +43,7 @@ input{
 .graf_data{
     height: 100%;
     width: 60%;
-    position: absolute;
+    position: absolute;     /*grafen*/
     left: 36%;
     top: 10%;
 
@@ -55,7 +55,7 @@ input{
     width: 99%;
     background-color:lightgray;
 
-    color: black;
+    color: black;               /*meddelanderutan*/
     font-size: 140%;
     scrollbar-color: auto;
 
