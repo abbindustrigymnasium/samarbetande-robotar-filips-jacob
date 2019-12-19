@@ -2,11 +2,13 @@
 #define pwm_A 5
 #define dir1 0 //bakåt
 #define dir2 4
-#define pin 12
-int Speed = 0;
+#define pin 12  
+unsigned long previousMillis = 0;  
+float previousPulses = 0;
 float Velocity = 0;
 float currentPulses = 0;
 int BVelocity = 0 ;
+int Speed = 0;
 
 EspMQTTClient client( 
  "ABB_Indgym",           // Wifi ssid
@@ -26,10 +28,8 @@ ICACHE_RAM_ATTR void hastighet() {//interupten kör funktionen hastighet
 }
 
 void SpeedCounter(){
-  unsigned long previousMillis = 0;
   unsigned long currentMillis; 
   unsigned long deltaMillis;
-  float previousPulses = 0;
   float deltaPulses = 0;
   float circumferenceOfWheels = 12.5;
   float revolution = 0;
