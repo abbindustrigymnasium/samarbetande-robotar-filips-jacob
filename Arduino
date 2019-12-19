@@ -6,7 +6,6 @@ unsigned long deltaMillis;
 #define dir2 4
 #define pin 12
 int Speed = 0;
-int Speed2= 0;
 float Velocity = 0;
 float currentPulses = 0;
 float previousPulses = 0;
@@ -18,14 +17,10 @@ float Kp = 9;
 float Ki = 0.01;
 float e = 0;
 float dist = 0;
-float timeMill; 
 float summErr= 0;
-
 #include "EspMQTTClient.h"
 
-void onConnectionEstablished();
-
-EspMQTTClient client(
+EspMQTTClient client( 
  "ABB_Indgym",           // Wifi ssid
   "7Laddaremygglustbil",           // Wifi password
   "maqiatto.com",  // MQTT broker ip
@@ -37,50 +32,34 @@ EspMQTTClient client(
   true,             // Enable web updater
   true              // Enable debug messages
 );
-
-
-/*void reglering(){
-  e = BVelocity - Velocity;
-  Speed  = Kp * e;
-
-  }*/
   
-ICACHE_RAM_ATTR void hastighet() {
-  currentPulses +=0.5;
-  //Serial.println("pulse");
+ICACHE_RAM_ATTR void hastighet() {//interupten kör funktionen hastighet
+  currentPulses +=0.5; 
 }
 
 void SpeedCounter(){
-  Serial.println("Speedcounter");
-  currentMillis = millis();
-  deltaMillis = currentMillis - previousMillis;
-  deltaPulses = currentPulses - previousPulses;
-  revolution = deltaPulses/96;
-  dist = revolution * circumferenceOfWheels;
-  Serial.println(dist);
-  Serial.println(revolution);
-  Velocity = (dist/deltaMillis)*1000;
-  previousMillis = currentMillis;
-  previousPulses = currentPulses;
-  e = BVelocity - Velocity;
-  summErr += e*deltaMillis;
-  Speed = (Kp * e)+(summErr*Ki);
   
-    
-  Serial.println(e);
-  Serial.println(Speed);
-  Serial.println(Velocity );   
-  Serial.println("...........");  
+  currentMillis = millis(); 
+  deltaMillis = currentMillis - previousMillis; //tiden mellan mätningar
+  deltaPulses = currentPulses - previousPulses; //pulserna mellan mätningar
+  revolution = deltaPulses/96; //antalet varv 
+  dist = revolution * circumferenceOfWheels; //sträckan
+
+  Velocity = (dist/deltaMillis)*1000; //hastighet m/s
+  previousMillis = currentMillis; //nollställer
+  previousPulses = currentPulses; //nollställer
+  
+  e = BVelocity - Velocity; //räcknar ut erroret
+  summErr += e*deltaMillis; //intergral för alla error
+  Speed = (Kp * e)+(summErr*Ki); //reglering av pwm
   
 }
-void onConnectionEstablished()
+void onConnectionEstablished() //när den connectar
 {
-  client.subscribe("filip.segerberg@abbindustrigymnasium.se/logger", [] (const String &payload)
+  client.subscribe("filip.segerberg@abbindustrigymnasium.se/logger", [] (const String &payload) //subscribar på en payloaden logger
   
   {
-  Serial.println(payload);
-
-  if(payload == "stop car"){
+  if(payload == "stop car"){ 
     Speed= 0;
     analogWrite(pwm_A, 0);
     }
@@ -100,7 +79,7 @@ void setup() {
   pinMode(dir1, OUTPUT);
   pinMode(dir2, OUTPUT);
   pinMode(pwm_A, OUTPUT);
-  attachInterrupt(digitalPinToInterrupt(pin), hastighet, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(pin), hastighet, CHANGE); //interupten
 }
 
 void loop() {
@@ -110,6 +89,5 @@ void loop() {
   digitalWrite(dir2, LOW);
   analogWrite(pwm_A, Speed);
   delay(10);
-  client.publish("filip.segerberg@abbindustrigymnasium.se/Velocity", String(Velocity) );
+  client.publish("filip.segerberg@abbindustrigymnasium.se/Velocity", String(Velocity) ); //skickar hastigheten med mqtt
 }   
-
