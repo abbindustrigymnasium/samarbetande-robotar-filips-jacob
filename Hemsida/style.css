@@ -1,0 +1,67 @@
+h1{
+    color:black;
+    text-align: center;
+    text-transform: capitalize;
+    font-size: 50px;
+    height: 70px;
+    background-color: lightgreen;
+    margin-top: -10px;
+    margin-right: -10%;
+    margin-left: -10%;
+
+
+}
+
+body{
+    background-color: white;
+}
+
+input{
+    color: black;
+    padding: 0.7% 1%;
+    font-size: 100%;
+        
+}
+
+.hej{
+    color: black;
+    border: none;
+    padding: 1% 2.3%;
+}
+
+
+.stopp{
+    color:white;
+    background-color: darkred;
+    border: none;
+    padding: 1% 2%;
+}
+
+.text{
+    width: 6%;
+}
+
+.graf_data{
+    height: 100%;
+    width: 60%;
+    position: absolute;
+    left: 36%;
+    top: 10%;
+
+}
+
+.messages{
+    overflow: scroll;
+    height: 40%;
+    width: 99%;
+    background-color:lightgray;
+
+    color: black;
+    font-size: 140%;
+    scrollbar-color: auto;
+
+    position: absolute;
+    top: 75%;
+    
+
+}

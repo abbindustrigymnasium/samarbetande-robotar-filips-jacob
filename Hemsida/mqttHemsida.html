@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="utf-8">
+      <title>mqtt-demo: A simple web application that can subscribe to topics from an MQTT broker over websockets</title>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+      <link rel="stylesheet" type="text/css" media="screen" href="style.css"/>
+      
+      <script>
+         
+        
+
+
+            function startConnect() {
+                // Generate a random client ID
+                clientID = "clientID_" + parseInt(Math.random() * 100);
+            
+                // Fetch the hostname/IP address and port number from the form
+                host =document.getElementById("host").value;
+                port = document.getElementById("port").value;
+            
+                // Print output for the user in the messages div
+                document.getElementById("messages").innerHTML += '<span>Connecting to: ' + host + ' on port: ' + port + '</span><br/>';
+                document.getElementById("messages").innerHTML += '<span>Using the following client value: ' + clientID + '</span><br/>';
+              // Initialize new Paho client connection
+                client = new Paho.MQTT.Client(host, Number(port), clientID);
+                // Set callback handlers
+                client.onConnectionLost = onConnectionLost;
+                client.onMessageArrived = onMessageArrived;
+            
+                client.connect({userName : "filip.segerberg@abbindustrigymnasium.se",password : "shrimpen boxar",
+                    onSuccess: onConnect,
+                    onFailure: onFail,
+                               });
+
+                // client.connect({userName : "jacob.engstrom@abbindustrigymnasium.se",password : "test123",
+                //     onSuccess: onConnect,
+                //     onFailure: onFail,
+                //                });
+            }
+            function onFail() {
+                document.getElementById("messages").innerHTML += '<span>ERROR: Connection to: ' + host + ' on port: ' + port + ' failed.</span><br/>'
+
+            }  
+           let topic="filip.segerberg@abbindustrigymnasium.se/";
+           let topic2="filip.segerberg@abbindustrigymnasium.se/Velocity";
+           let topic3="filip.segerberg@abbindustrigymnasium.se/Velocity1";
+            // Called when the client connects
+            function onConnect() {
+                // Fetch the MQTT topic from the form
+                topic +=document.getElementById("topic").value;
+
+                console.log(topic);
+ 
+                // Print output for the user in the messages div
+                document.getElementById("messages").innerHTML += '<span>Subscribing to: ' + topic + '</span><br/>';
+                document.getElementById("messages").innerHTML += '<span>Subscribing to: ' + topic2 + '<br/>';
+                document.getElementById("messages").innerHTML += '<span>Subscribing to: ' + topic3 + '<br/>';
+            
+                // Subscribe to the requested topic
+                client.subscribe(topic);
+                  message= new Paho.MQTT.Message("stopp car0");
+                  message.destinationName=topic;
+                  client.send(message);
+                
+                client.subscribe(topic2);
+                  message= new Paho.MQTT.Message("stopp car1");
+                  message.destinationName=topic2;
+                  client.send(message);
+
+                client.subscribe(topic3);
+                message= new Paho.MQTT.Message("stopp car2");
+                message.destinationName=topic3;
+                client.send(message);
+            }
+            function onSend() {
+                // Fetch the MQTT topic from the form
+                // Print output for the user in the messages div
+               let message= document.getElementById("newMessage").value;
+            console.log(message);
+                  message= new Paho.MQTT.Message(message);
+                  message.destinationName=topic;
+                  client.send(message);
+
+
+            }
+            
+            // Called when the client loses its connection
+            function onConnectionLost(responseObject) {
+                document.getElementById("messages").innerHTML += '<span>ERROR: Connection lost</span><br/>';
+                if (responseObject.errorCode !== 0) {
+                    document.getElementById("messages").innerHTML += '<span>ERROR: ' + + responseObject.errorMessage + '</span><br/>';
+                }
+            }
+            
+            function stoppCar(payloadString){
+                document.getElementById("messages").innerHTML += "stopp car<br/>"
+                message= new Paho.MQTT.Message("stopp car");
+                message.destinationName=topic;
+                client.send(message);
+
+            }
+            function speedChange(payloadInt){
+                speed =document.getElementById("Velocity").value;
+                document.getElementById("messages").innerHTML += "Speed Change<br/>"
+                message= new Paho.MQTT.Message(quantity);
+                message.destinationName=quantity;
+                client.send(message);
+            }
+            // Called when a message arrives
+            function onMessageArrived(message) {
+                //console.log("onMessageArrived: " + message.payloadString);
+                document.getElementById("messages").innerHTML += '<span>Topic: ' + message.destinationName + '  | ' + message.payloadString + '</span><br/>';
+                if (message.destinationName == "filip.segerberg@abbindustrigymnasium.se/Velocity") {
+                    var Velocity = parseFloat( message.payloadString);
+                    adddata(Velocity,0);
+                }
+                if (message.destinationName == "filip.segerberg@abbindustrigymnasium.se/Velocity1"){
+                    var Velocity1 = parseFloat( message.payloadString);
+                    adddata(Velocity1, 1); 
+                }
+            }
+            
+            // Called when the disconnection button is pressed
+            function startDisconnect() {
+                client.disconnect();
+                document.getElementById("messages").innerHTML += '<span>Disconnected</span><br/>';
+            }
+
+            </script>
+        </style>
+    </head>
+   <body>
+       <div class="wrapper">
+         <h1 >Car Controller</h1>
+         <form id="connection-information-form">
+
+            <b>Hostname or IP Address:</b> 
+            <br>
+            <input id="host" type="text" name="host" value="maqiatto.com"><br>
+            <br>
+            <b>Port:</b>
+            <br>
+            <input id="port" type="text" name="port" value="8883"><br>
+            <br>
+            <b>Topic:</b>
+            <br>
+            <input id="topic" type="text" name="topic" value="logger"><br><br>
+            <input class = hej type="button" onclick="startConnect()" value="Connect">
+            <input class = hej type="button" onclick="startDisconnect()" value="Disconnect">
+            <br><br>
+            <input class = text id="newMessage" type="text" name="newMessage" value="">
+            <input class = hej type="button" onclick="onSend()" value="Send">
+       
+            <input class = stopp type="button" onclick="stoppCar()" value="Stopp">
+            <br><br>
+         </form>
+         <div class = "graf_data">
+
+         
+         <canvas id="Chart" ></canvas>
+        </div>
+         <script>
+             var canvas = document.getElementById('Chart');
+        var data = {
+        labels: [],
+        datasets: [
+            {
+                label: "Ärvärdet Filip",
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: "rgba(75,192,0)",
+                borderColor: "rgba(75,192,0)",
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                data: [],
+            },
+            {
+                label: "Ärvärdet Jacob",
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: "rgba(75,0,192)",
+                borderColor: "rgba(75,0,192)",
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                data: [],
+            },  
+            {
+                label: "Börvärdet",
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: "rgba(192,0,0)",
+                borderColor: "rgba(75,192,192,1)",
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                data: [],
+            },
+            // {
+            //     label: "Reglervärdet",
+            //     fill: false,
+            //     lineTension: 0.1,
+            //     backgroundColor: "rgba(75,192,192,0.4)",
+            //     borderColor: "rgb(191, 191, 191)",
+            //     borderCapStyle: 'butt',
+            //     borderDash: [],
+            //     borderDashOffset: 0.0,
+            //     borderJoinStyle: 'miter',
+            //     data: [],
+            // },
+            {
+                label: "PWMvärdet Filip",
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: "rgba(192,100,0)",
+                borderColor: "rgba(192,100,0)",
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                data: [],
+            },
+            {
+                label: "PWMvärdet Jacob",
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: "rgba(192,0,192)",
+                borderColor: "rgba(192,0,192)",
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                data: [],
+            },
+        ]
+        };
+        function adddata(data ,index){
+            var d = new Date();
+            var n = d.getSeconds();
+            
+            myLineChart.data.datasets[index].data.push(data);
+            myLineChart.data.datasets[2].data.push(document.getElementById("newMessage").value);
+            myLineChart.data.datasets[index].data.push(data);
+            myLineChart.data.labels.push(n);
+            
+            myLineChart.update();
+        }
+
+        var option = {
+                chart: {
+                    height: 300,
+                    type: 'line',
+                    animations: {
+                        enabled: true,
+                        easing: 'linear',
+                        dynamicAnimation: {
+                            speed: 1000
+                        }
+                    },
+                    toolbar: {
+                        show: false
+                    },
+                    zoom: {
+                        enabled: false
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'smooth'
+                },
+                series: [{
+                    data: data,
+                    // data1: data1
+                }],
+                markers: {
+                    size: 0
+                },
+
+                yaxis: {
+                    max: 200
+                },
+                legend: {
+                    show: false
+                },
+            }
+        var myLineChart = Chart.Line(canvas,{
+        data:data,
+        options:option
+        });
+         </script>
+         <div class = "messages" id="messages"></div>
+      </div>
+   </body>
+</html>
