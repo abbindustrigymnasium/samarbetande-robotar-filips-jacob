@@ -1,6 +1,4 @@
-unsigned long previousMillis = 0;
-unsigned long currentMillis;
-unsigned long deltaMillis;
+#include "EspMQTTClient.h"
 #define pwm_A 5
 #define dir1 0 //bakåt
 #define dir2 4
@@ -8,17 +6,7 @@ unsigned long deltaMillis;
 int Speed = 0;
 float Velocity = 0;
 float currentPulses = 0;
-float previousPulses = 0;
-float deltaPulses = 0;
-float revolution = 0;
-float circumferenceOfWheels = 12.5;
 int BVelocity = 0 ;
-float Kp = 9;
-float Ki = 0.01;
-float e = 0;
-float dist = 0;
-float summErr= 0;
-#include "EspMQTTClient.h"
 
 EspMQTTClient client( 
  "ABB_Indgym",           // Wifi ssid
@@ -38,16 +26,28 @@ ICACHE_RAM_ATTR void hastighet() {//interupten kör funktionen hastighet
 }
 
 void SpeedCounter(){
-  
+  unsigned long previousMillis = 0;
+  unsigned long currentMillis; 
+  unsigned long deltaMillis;
+  float previousPulses = 0;
+  float deltaPulses = 0;
+  float circumferenceOfWheels = 12.5;
+  float revolution = 0;
+  float dist = 0;
+    
   currentMillis = millis(); 
   deltaMillis = currentMillis - previousMillis; //tiden mellan mätningar
   deltaPulses = currentPulses - previousPulses; //pulserna mellan mätningar
   revolution = deltaPulses/96; //antalet varv 
   dist = revolution * circumferenceOfWheels; //sträckan
-
   Velocity = (dist/deltaMillis)*1000; //hastighet m/s
   previousMillis = currentMillis; //nollställer
   previousPulses = currentPulses; //nollställer
+  
+  float Kp = 9;
+  float Ki = 0.01;
+  float e = 0;
+  float summErr= 0;
   
   e = BVelocity - Velocity; //räcknar ut erroret
   summErr += e*deltaMillis; //intergral för alla error
@@ -91,3 +91,4 @@ void loop() {
   delay(10);
   client.publish("filip.segerberg@abbindustrigymnasium.se/Velocity", String(Velocity) ); //skickar hastigheten med mqtt
 }   
+
