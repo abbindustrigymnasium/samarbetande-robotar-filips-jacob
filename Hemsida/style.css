@@ -2,8 +2,8 @@ h1{
     color:black;
     text-align: center;
     text-transform: capitalize;
-    font-size: 50px;
-    height: 70px;
+    font-size: 400%;   /*Headern*/
+    height: 10%;
     background-color: lightgreen;
     margin-top: -10px;
     margin-right: -10%;
@@ -18,13 +18,12 @@ body{
 
 input{
     color: black;
-    padding: 0.7% 1%;
+    padding: 0.7% 1%;       /*rutorna för host, port och topic*/
     font-size: 100%;
         
 }
 
-.hej{
-    color: black;
+.knapp{
     border: none;
     padding: 1% 2.3%;
 }
