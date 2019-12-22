@@ -24,5 +24,5 @@ Hemsidan används för att kunna ändra börhastigheten på bilarn, stoppa bilar
 När vi har arbetet med prodjektet så har vi oftast arbetat tillsamans men Jacob arbetade mer med hemsidan och Filip.S arbetade mera med arduinokoden. Vi tycket att samanrbetet har gått bra och vi har ungefär lika många timmar lagda på prodjektet för att det skulle bli klart.
 
 ## Problem
-6
+
 Filip.S bil kan köra en konstant hastighet samt skika sin data med MQTT till våran hemsida där den visas på en graf, men Jacobs bil är det något i som gör att arduino kortet inte regestrerar pulserna ifrån hall-elementet. vi har gjort en grundlig felsökning utan något resultat. vi ska arbeta mer unter vårtetminan för att lösa problemet.
