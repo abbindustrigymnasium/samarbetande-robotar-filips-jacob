@@ -17,7 +17,7 @@ För att våran mikrodator ska kunna skicka och ta i mot MQTT behöver man ett t
 
 ## Hemsida
 
-Hemsidan används för att kunna ändra börhastigheten på bilarn, stoppa bilarna samta se på en graf båda bilarnas PWM värde och aktuela hastighet Klicka [HÄR](http://jacob-filips.s3-website-us-east-1.amazonaws.com) för att gå till våran hemsida.
+Hemsidan används för att kunna ändra börhastigheten på bilarn, stoppa bilarna samta se på en graf båda bilarnas PWM värde och aktuela hastighet Klicka **[HÄR](http://jacob-filips.s3-website-us-east-1.amazonaws.com)** för att gå till våran hemsida.
 
 ## Arbetsfördelning
 
