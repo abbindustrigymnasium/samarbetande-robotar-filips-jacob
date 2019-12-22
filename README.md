@@ -25,4 +25,4 @@ När vi har arbetet med prodjektet så har vi oftast arbetat tillsamans men Jaco
 
 ## Problem
 
-Filip.S bil kan köra en konstant hastighet samt skika sin data med MQTT till våran hemsida där den visas på en graf, men Jacobs bil är det något i som gör att arduino kortet inte regestrerar pulserna ifrån hall-elementet. vi har gjort en grundlig felsökning utan något resultat. vi ska arbeta mer unter vårtetminan för att lösa problemet.
+Filip.S bil kan köra en konstant hastighet samt skicka sin data med MQTT till våran hemsida där den visas på en graf, men Jacobs bil är det något som gör att arduinokortet inte regestrerar pulserna ifrån hall-elementet. Vi har gjort en grundlig felsökning utan något resultat. Vi ska arbeta mer unter vårtetminan för att lösa problemet.
